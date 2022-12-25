@@ -1,5 +1,11 @@
 package com.tulio.model.entity
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Id
+
 /**
  * Entidade do animal.
  * @param id Identificador do animal.
@@ -8,6 +14,7 @@ package com.tulio.model.entity
  */
 @Entity(name = "tas_ani_animal")
 class Animal (
+    @Id
     @Column(name = "ani_id")
     val id: Long? = null,
 
@@ -15,8 +22,8 @@ class Animal (
     val name: String,
 
     @Column(name = "ani_type")
-    @Enumerated(EnumType.String)
-    val type: Animal.Type,
+    @Enumerated(EnumType.STRING)
+    val type: Type,
 ) {
 
     /**
