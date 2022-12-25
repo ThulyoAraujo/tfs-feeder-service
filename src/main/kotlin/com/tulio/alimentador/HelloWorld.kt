@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/hello-world")
 class HelloWorld {
 
+    /**
+     * Teste de conexão.
+     */
     @GetMapping
     fun hellorWorld(): String {
-        return "Hello"
+        return "Hello world!"
     }
 
 }

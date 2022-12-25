@@ -1,27 +1,28 @@
 package com.tulio.controller
 
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.tulio.service.IAnimalService
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/animal")
-class AnimalController {
+class AnimalController(
+    private val animalService: IAnimalService
+) {
 
     @PostMapping()
     fun createAnimal() {
         //Todo
     }
 
-    @GetMapping()
-    fun findAnimal() {
-        //Todo
+    /**
+     * Procura um animal pelo nome.
+     */
+    @GetMapping("/{identifier}")
+    fun findAnimal(@PathVariable identifier: Any) {
+        return animalService.findAnimal(identifier)
     }
 
-    @PatchMapping()
+    @PutMapping()
     fun updateAnimal() {
         //Todo
     }
