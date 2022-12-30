@@ -1,4 +1,4 @@
-package com.tulio.alimentador
+package com.tulio.alimentador.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,7 +13,7 @@ class HelloWorld {
      */
     @GetMapping
     fun hellorWorld(): String {
-        return "Hello world!"
+        return "Hello world! Teste"
     }
 
 }

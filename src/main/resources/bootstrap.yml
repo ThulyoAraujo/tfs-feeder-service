@@ -4,9 +4,9 @@ spring:
   application:
     name: tfs-feeder-service
   datasource:
-    url: "jdbc:postgresql://localhost:3306/tfs-feeder-service"
+    url: "jdbc:postgresql://localhost:5432/tfs_feeder_service"
     username: "username"
-    password: "password"
+    password: "PostTeste123"
   jpa:
     properties:
       hibernate:

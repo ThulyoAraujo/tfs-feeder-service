@@ -1,4 +1,4 @@
-package com.tulio.service
+package com.tulio.alimentador.service
 
 import org.springframework.stereotype.Service
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 interface IAnimalService {
 
     /**
-     * Procura um animal pelo nome.
+     * Procura um animal pelo id.
      */
-    fun findAnimal(identifier: Any)
+    fun findAnimalById(identifier: Long): String
 }
