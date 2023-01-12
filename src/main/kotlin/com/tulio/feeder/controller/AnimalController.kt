@@ -36,6 +36,7 @@ class AnimalController(
 
     /**
      * Atualiza dados de um animal específico.
+     * @param id Identificador único do animal.
      * @param animalForm Formulário com dados do animal.
      * @return Animal entidade.
      */
@@ -45,5 +46,17 @@ class AnimalController(
         @RequestBody @Valid animalForm: AnimalForm
     ): Any {
         return animalService.updateAnimal(id, animalForm)
+    }
+
+    /**
+     * Deleta os registros de um animal do banco.
+     * @param id Identificador único do animal.
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    fun deleteAnimal(
+        @PathVariable("id") id: Long
+    ): Any {
+        return animalService.deleteAnimal(id)
     }
 }
