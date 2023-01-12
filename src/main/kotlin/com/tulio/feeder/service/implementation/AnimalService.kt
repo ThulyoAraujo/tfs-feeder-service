@@ -1,6 +1,7 @@
 package com.tulio.feeder.service.implementation
 
 import com.tulio.feeder.mapper.IAnimalMapper
+import com.tulio.feeder.model.entity.Animal
 import com.tulio.feeder.model.form.AnimalForm
 import com.tulio.feeder.repository.IAnimalRepository
 import com.tulio.feeder.service.IAnimalService
@@ -12,16 +13,20 @@ class AnimalService(
     private val animalMapper: IAnimalMapper
 ): IAnimalService {
 
-    override fun helloWorld(): String {
-        return "Hello World by Service!"
-    }
-
     override fun findAll(): Any {
         return animalRepository.findAll()
     }
 
-    override fun createAnimal(form: AnimalForm): Any {
-        val animal = animalMapper.toAnimal(form)
+    override fun createAnimal(animalForm: AnimalForm): Animal {
+        val animal = animalMapper.toAnimal(animalForm)
+        return animalRepository.save(animal)
+    }
+
+    override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
+        val animal = animalRepository.findById(id).orElseThrow()
+
+        animal.name = animalForm.name
+
         return animalRepository.save(animal)
     }
 }
