@@ -1,5 +1,6 @@
 package com.tulio.feeder.service
 
+import com.tulio.feeder.model.entity.Animal
 import com.tulio.feeder.model.form.AnimalForm
 
 /**
@@ -7,9 +8,10 @@ import com.tulio.feeder.model.form.AnimalForm
  */
 interface IAnimalService {
 
-    fun helloWorld(): String
+    fun createAnimal(animalForm: AnimalForm): Animal
 
     fun findAll(): Any
 
-    fun createAnimal(form: AnimalForm): Any
+    fun updateAnimal(id: Long, animalForm: AnimalForm): Animal
+
 }
