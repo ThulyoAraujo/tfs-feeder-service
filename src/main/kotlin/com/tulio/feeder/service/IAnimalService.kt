@@ -14,4 +14,6 @@ interface IAnimalService {
 
     fun updateAnimal(id: Long, animalForm: AnimalForm): Animal
 
+    fun deleteAnimal(id: Long): Any
+
 }

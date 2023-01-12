@@ -24,9 +24,12 @@ class AnimalService(
 
     override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
         val animal = animalRepository.findById(id).orElseThrow()
-
         animal.name = animalForm.name
-
         return animalRepository.save(animal)
+    }
+
+    override fun deleteAnimal(id: Long): Any {
+        val animal = animalRepository.findById(id).orElseThrow()
+        return animalRepository.delete(animal)
     }
 }
