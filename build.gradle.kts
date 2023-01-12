@@ -7,6 +7,8 @@ plugins {
 	kotlin("plugin.spring") version "1.6.21"
 	//Evita problema com construtores padrão:
 	id("org.jetbrains.kotlin.plugin.jpa") version "1.6.21"
+	//Kapt ajuda no processamento das anotações
+	kotlin("kapt") version "1.8.0"
 }
 
 group = "com.tulio"
@@ -33,6 +35,10 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	////Evita problema com construtores padrão:
 	implementation("org.jetbrains.kotlin:kotlin-noarg:1.6.21")
+
+	//MapStruct (Mapper)
+	implementation("org.mapstruct:mapstruct:1.5.3.Final")
+	kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
 }
 
 tasks.withType<KotlinCompile> {
@@ -44,4 +50,10 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+kapt {
+	arguments {
+		arg("mapstruct.defaultComponentModel", "spring")
+	}
 }
