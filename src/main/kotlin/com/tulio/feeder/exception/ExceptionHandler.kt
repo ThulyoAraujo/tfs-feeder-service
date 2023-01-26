@@ -45,6 +45,10 @@ class ExceptionHandler {
         exception.bindingResult.fieldErrors.forEach{
             error -> errorMessage.put(error.field, error.defaultMessage)
         }
+        //ToDo
+//        exception.bindingResult.allErrors.map{
+//                error -> error.defaultMessage
+//        }
         return ErrorView(
             status = HttpStatus.NOT_FOUND.value(),
             error = HttpStatus.NOT_FOUND.name,
