@@ -1,5 +1,6 @@
 package com.tulio.feeder.model.form
 
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 
 /**
@@ -7,6 +8,8 @@ import javax.validation.constraints.NotBlank
  * @param name Nome do animal.
  */
 class AnimalForm (
-    @field:NotBlank(message = "O nome não deve ser nulo, vazio ou branco.")
+
+    @field:Min(3, message = "O nome do animal não deve ter menos de três dígitos.")
+    @field:NotBlank(message = "O nome do animal deve ser enviado.")
     var name: String
 )
