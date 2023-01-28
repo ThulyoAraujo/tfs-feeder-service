@@ -26,7 +26,7 @@ class AnimalService(
 
     override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
         val animal = animalRepository.findById(id).orElseThrow{NotFoundException(notFoundException)}
-        animal.name = animalForm.name
+        animal.name = animalForm.name.toString()
         return animalRepository.save(animal)
     }
 

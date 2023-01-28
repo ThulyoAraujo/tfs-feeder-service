@@ -6,7 +6,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import java.util.HashMap
 import javax.servlet.http.HttpServletRequest
 
 @RestControllerAdvice
@@ -45,10 +44,8 @@ class ExceptionHandler {
         exception.bindingResult.fieldErrors.forEach{
             error -> errorMessage.put(error.field, error.defaultMessage)
         }
-        //ToDo
-//        exception.bindingResult.allErrors.map{
-//                error -> error.defaultMessage
-//        }
+        /* Da seguinte forma é possível mostrar todos os erros que aconteram ao mesmo tempo:
+                exception.bindingResult.allErrors.map{error -> error.defaultMessage} */
         return ErrorView(
             status = HttpStatus.NOT_FOUND.value(),
             error = HttpStatus.NOT_FOUND.name,
