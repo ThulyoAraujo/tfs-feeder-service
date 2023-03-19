@@ -22,7 +22,7 @@ class AnimalController(
     @PostMapping
     fun createAnimal(
         @RequestBody @Valid animalForm: AnimalForm
-    ): Any? {
+    ): Any {
         return animalService.createAnimal(animalForm)
     }
 
