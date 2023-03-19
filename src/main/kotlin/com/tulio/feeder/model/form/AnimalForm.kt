@@ -2,7 +2,6 @@ package com.tulio.feeder.model.form
 
 import com.tulio.feeder.model.entity.FoodType
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 /**
@@ -10,6 +9,8 @@ import javax.validation.constraints.Size
  * @param name Nome do animal.
  * @param foodType Tipo da comida do animal. Enum para saber se o animal é carnívoro ou herbívoro.
  * @param primaryPreference Lista de comidas preferidas do animal. Recebemos os ids das comidas previamente cadastradas no banco.
+ * @param secondaryPreference Lista de comidas aceitas normalmente pelo animal. Recebemos os ids das comidas previamente cadastradas no banco.
+ * @param prohibited Lista de comidas odiadas ou tóxicas ao animal. Recebemos os ids das comidas previamente cadastradas no banco.
  */
 class AnimalForm (
 
@@ -19,10 +20,9 @@ class AnimalForm (
 
     var foodType: FoodType? = FoodType.VEGETABLE,
 
-    @field:NotNull(message = "Ao menos uma comida preferida do animal deve ser informada.")
-    var primaryPreference: List<Int>,
-//
-//    var secundaryPreference: List<Food>? = null,
-//
-//    var prohibited: List<Food>? = null
+    var primaryPreference: List<Long>? = emptyList(),
+
+    var secondaryPreference: List<Long>? = emptyList(),
+
+    var prohibited: List<Long>? = emptyList(),
 )
