@@ -3,6 +3,8 @@ package com.tulio.feeder.service.implementation
 import com.tulio.feeder.exception.AlreadyExistsException
 import com.tulio.feeder.exception.NotFoundException
 import com.tulio.feeder.mapper.IAnimalMapper
+import com.tulio.feeder.mapper.IFoodPreferencesMapper
+import com.tulio.feeder.model.dto.AnimalDTO
 import com.tulio.feeder.model.entity.Animal
 import com.tulio.feeder.model.entity.FoodPreferences
 import com.tulio.feeder.model.entity.PreferenceLevel
@@ -18,6 +20,7 @@ class AnimalService(
     private val foodRepository: IAnimalRepository,
     private val foodPreferencesRepository: IFoodPreferencesRepository,
     private val animalMapper: IAnimalMapper,
+    private val foodPreferencesMapper: IFoodPreferencesMapper,
     private val notFoundAnimalException: String = "Animal não encontrado em nosso banco de dados.",
     private val notFoundFoodException: String = "Comida não encontrada em nosso banco de dados.",
     private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados."
@@ -27,7 +30,7 @@ class AnimalService(
         return animalRepository.findAll()
     }
 
-    override fun createAnimal(animalForm: AnimalForm): Any? {
+    override fun createAnimal(animalForm: AnimalForm): AnimalDTO {
         //Verifica se já não existe esse animal no banco.
         val optionalAnimal = animalRepository.findByNameIgnoreCase(animalForm.name)
         if(optionalAnimal.isPresent) throw AlreadyExistsException(alreadyExistsException)
@@ -38,30 +41,30 @@ class AnimalService(
             if(!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
         }
 
-        // O importante é que essa query retorne todas as comidas associadas a este animal e liste elas em um DTO.
-        // Para listá-las, será necessário o uso de um foreach jogando o resultado da collection dentro do dto.
-
         val animal = animalMapper.toAnimal(animalForm)
         val animalSaved = animalRepository.save(animal)
+        val animalDTO = animalMapper.toAnimalDTO(animalSaved)
 
         //Salva as preferências de comidas
+        val listOffoodPreferencesSaved = mutableListOf<FoodPreferences>()
         animalForm.primaryPreference?.forEach { primary ->
             val foodPreferences = FoodPreferences(null, animalSaved.id, primary, PreferenceLevel.PRIMARY)
-            foodPreferencesRepository.save(foodPreferences)
+            val primaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+            listOffoodPreferencesSaved.add(primaryFoodPreferencesSaved)
         }
         animalForm.secondaryPreference?.forEach { secondary ->
             val foodPreferences = FoodPreferences(null, animalSaved.id, secondary, PreferenceLevel.SECONDARY)
-            foodPreferencesRepository.save(foodPreferences)
+            val secondaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+            listOffoodPreferencesSaved.add(secondaryFoodPreferencesSaved)
         }
         animalForm.prohibited?.forEach { prohibited ->
             val foodPreferences = FoodPreferences(null, animalSaved.id, prohibited, PreferenceLevel.PROHIBITED)
-            foodPreferencesRepository.save(foodPreferences)
+            val prohibitedFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+            listOffoodPreferencesSaved.add(prohibitedFoodPreferencesSaved)
         }
+        animalDTO.foodPreferences = foodPreferencesMapper.toFoodPreferencesDTO(listOffoodPreferencesSaved)
 
-        return println("Cadastrei")
-
-        //Todo Criar DTO
-//        return animalDTO
+        return animalDTO
     }
 
     override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
