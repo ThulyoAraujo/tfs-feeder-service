@@ -5,6 +5,8 @@ import javax.persistence.*
 /**
  * @param id Identificador único da comida.
  * @param name Nome da comida.
+ * @param foodType Tipo da comida cadastrada. Enum com tipos vegetal ou animal.
+ * @param note Descrição sobre a comida.
  */
 @Entity(name = "tfs_foo_food")
 class Food(
@@ -22,12 +24,4 @@ class Food(
 
     @Column(name = "foo_note")
     var note: String? = null
-
-/*TODO - VERIFICAR DIRETO NO BANCO OCMO FAZER ESSA QUERY USANDO A TABELA DOS ANIMAIS
-    @ManyToMany
-    @Column(name = "foo_preferred_by")
-    var preferredBy: List<Food>,
-    @ManyToMany
-    @Column(name = "foo_avoided_by")
-    var avoidedBy: List<Food>,*/
 )
