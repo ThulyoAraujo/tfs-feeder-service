@@ -20,10 +20,10 @@ class Animal(
     @Enumerated(EnumType.STRING)
     var foodType: FoodType? = FoodType.VEGETABLE,
 
-//    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-//    @JoinColumn(name = "ani_primary_preference", referencedColumnName = "foo_id")
-    @Column(name = "ani_primary_preference")
-    var primaryPreference: List<Int>? = emptyList(),
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "ani_primary_preference", referencedColumnName = "foo_id")
+//    @Column(name = "ani_primary_preference")
+    var primaryPreference: List<Food>? = emptyList(),
 
 //    @ManyToMany
 //    @JoinColumn(name = "ani_secundary_preference", referencedColumnName = "foo_id")

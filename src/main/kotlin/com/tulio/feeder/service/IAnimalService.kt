@@ -8,7 +8,7 @@ import com.tulio.feeder.model.form.AnimalForm
  */
 interface IAnimalService {
 
-    fun createAnimal(animalForm: AnimalForm): Animal
+    fun createAnimal(animalForm: AnimalForm): Any?
 
     fun findAll(): Any
 
