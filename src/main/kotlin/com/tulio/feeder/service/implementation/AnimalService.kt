@@ -27,6 +27,7 @@ class AnimalService(
 ) : IAnimalService {
 
     override fun findAll(): Any {
+        //Todo Adicionar DTO no retorno
         return animalRepository.findAll()
     }
 
@@ -37,7 +38,7 @@ class AnimalService(
 
         //Valida se existe no banco as comidas passadas como comidas preferenciais.
         animalForm.primaryPreference?.forEach { food ->
-            val optionalFood = foodRepository.findById(food.toLong())
+            val optionalFood = foodRepository.findById(food)
             if(!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
         }
 
@@ -69,7 +70,7 @@ class AnimalService(
 
     override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
         val animal = animalRepository.findById(id).orElseThrow { NotFoundException(notFoundAnimalException) }
-        animal.name = animalForm.name.toString()
+        animal.name = animalForm.name
         return animalRepository.save(animal)
     }
 
