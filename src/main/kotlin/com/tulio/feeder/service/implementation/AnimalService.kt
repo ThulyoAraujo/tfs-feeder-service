@@ -11,19 +11,24 @@ import com.tulio.feeder.model.entity.PreferenceLevel
 import com.tulio.feeder.model.form.AnimalForm
 import com.tulio.feeder.repository.IAnimalRepository
 import com.tulio.feeder.repository.IFoodPreferencesRepository
+import com.tulio.feeder.repository.IFoodRepository
 import com.tulio.feeder.service.IAnimalService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.UnexpectedRollbackException
+import javax.transaction.Transactional
 
 @Service
 class AnimalService(
     private val animalRepository: IAnimalRepository,
-    private val foodRepository: IAnimalRepository,
+    private val foodRepository: IFoodRepository,
     private val foodPreferencesRepository: IFoodPreferencesRepository,
     private val animalMapper: IAnimalMapper,
     private val foodPreferencesMapper: IFoodPreferencesMapper,
     private val notFoundAnimalException: String = "Animal não encontrado em nosso banco de dados.",
     private val notFoundFoodException: String = "Comida não encontrada em nosso banco de dados.",
-    private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados."
+    private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados.",
+    private val dataPersistException: String = "Erro ao persistir os dados do cadastro no banco de dados."
+
 ) : IAnimalService {
 
     override fun findAll(): Any {
@@ -31,41 +36,57 @@ class AnimalService(
         return animalRepository.findAll()
     }
 
+    @Transactional
     override fun createAnimal(animalForm: AnimalForm): AnimalDTO {
         //Verifica se já não existe esse animal no banco.
         val optionalAnimal = animalRepository.findByNameIgnoreCase(animalForm.name)
-        if(optionalAnimal.isPresent) throw AlreadyExistsException(alreadyExistsException)
+        if (optionalAnimal.isPresent) throw AlreadyExistsException(alreadyExistsException)
 
-        //Valida se existe no banco as comidas passadas como comidas preferenciais.
+        //Valida se existe no banco as comidas passadas na requisição.
         animalForm.primaryPreference?.forEach { food ->
             val optionalFood = foodRepository.findById(food)
-            if(!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
+            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
+        }
+        animalForm.primaryPreference?.forEach { food ->
+            val optionalFood = foodRepository.findById(food)
+            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
+        }
+        animalForm.primaryPreference?.forEach { food ->
+            val optionalFood = foodRepository.findById(food)
+            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
         }
 
         val animal = animalMapper.toAnimal(animalForm)
-        val animalSaved = animalRepository.save(animal)
-        val animalDTO = animalMapper.toAnimalDTO(animalSaved)
 
-        //Salva as preferências de comidas
-        val listOffoodPreferencesSaved = mutableListOf<FoodPreferences>()
-        animalForm.primaryPreference?.forEach { primary ->
-            val foodPreferences = FoodPreferences(null, animalSaved.id, primary, PreferenceLevel.PRIMARY)
-            val primaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
-            listOffoodPreferencesSaved.add(primaryFoodPreferencesSaved)
-        }
-        animalForm.secondaryPreference?.forEach { secondary ->
-            val foodPreferences = FoodPreferences(null, animalSaved.id, secondary, PreferenceLevel.SECONDARY)
-            val secondaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
-            listOffoodPreferencesSaved.add(secondaryFoodPreferencesSaved)
-        }
-        animalForm.prohibited?.forEach { prohibited ->
-            val foodPreferences = FoodPreferences(null, animalSaved.id, prohibited, PreferenceLevel.PROHIBITED)
-            val prohibitedFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
-            listOffoodPreferencesSaved.add(prohibitedFoodPreferencesSaved)
-        }
-        animalDTO.foodPreferences = foodPreferencesMapper.toFoodPreferencesDTO(listOffoodPreferencesSaved)
+        try {
+            //Salva o animal
+            val animalSaved = animalRepository.save(animal)
 
-        return animalDTO
+            //Salva as preferências de comidas
+            val listOffoodPreferencesSaved = mutableListOf<FoodPreferences>()
+            animalForm.primaryPreference?.forEach { primary ->
+                val foodPreferences = FoodPreferences(null, animalSaved.id, primary, PreferenceLevel.PRIMARY)
+                val primaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+                listOffoodPreferencesSaved.add(primaryFoodPreferencesSaved)
+            }
+            animalForm.secondaryPreference?.forEach { secondary ->
+                val foodPreferences = FoodPreferences(null, animalSaved.id, secondary, PreferenceLevel.SECONDARY)
+                val secondaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+                listOffoodPreferencesSaved.add(secondaryFoodPreferencesSaved)
+            }
+            animalForm.prohibited?.forEach { prohibited ->
+                val foodPreferences = FoodPreferences(null, animalSaved.id, prohibited, PreferenceLevel.PROHIBITED)
+                val prohibitedFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
+                listOffoodPreferencesSaved.add(prohibitedFoodPreferencesSaved)
+            }
+
+            val animalDTO = animalMapper.toAnimalDTO(animalSaved)
+            animalDTO.foodPreferences = foodPreferencesMapper.toFoodPreferencesDTO(listOffoodPreferencesSaved)
+
+            return animalDTO
+        } catch (e: Exception) {
+            throw UnexpectedRollbackException(dataPersistException)
+        }
     }
 
     override fun updateAnimal(id: Long, animalForm: AnimalForm): Animal {
