@@ -18,7 +18,6 @@ class AnimalController(
      * @param animalForm Formulário com dados do animal.
      */
     //Todo Ajustar retorno Any
-    //Todo Try catch poderia evitar do código salvar entidades se o código der erro
     @PostMapping
     fun createAnimal(
         @RequestBody @Valid animalForm: AnimalForm

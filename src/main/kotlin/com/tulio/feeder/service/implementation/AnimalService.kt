@@ -5,6 +5,7 @@ import com.tulio.feeder.exception.NotFoundException
 import com.tulio.feeder.mapper.IAnimalMapper
 import com.tulio.feeder.mapper.IFoodPreferencesMapper
 import com.tulio.feeder.model.dto.AnimalDTO
+import com.tulio.feeder.model.dto.IAnimalDTO
 import com.tulio.feeder.model.entity.Animal
 import com.tulio.feeder.model.entity.FoodPreferences
 import com.tulio.feeder.model.entity.PreferenceLevel
@@ -24,16 +25,20 @@ class AnimalService(
     private val foodPreferencesRepository: IFoodPreferencesRepository,
     private val animalMapper: IAnimalMapper,
     private val foodPreferencesMapper: IFoodPreferencesMapper,
-    private val notFoundAnimalException: String = "Animal não encontrado em nosso banco de dados.",
+    private val notFoundAnimalException: String = "Nada encontrado em nosso banco de dados.",
     private val notFoundFoodException: String = "Comida não encontrada em nosso banco de dados.",
     private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados.",
     private val dataPersistException: String = "Erro ao persistir os dados do cadastro no banco de dados."
 
 ) : IAnimalService {
 
-    override fun findAll(): Any {
-        //Todo Adicionar DTO no retorno
-        return animalRepository.findAll()
+    override fun findAll(): List<IAnimalDTO> {
+        try {
+            val animalDTO = IAnimalDTO::class.java
+            return animalRepository.findAllBy(animalDTO)
+        } catch (e: Exception){
+            throw Exception(notFoundAnimalException)
+        }
     }
 
     @Transactional
