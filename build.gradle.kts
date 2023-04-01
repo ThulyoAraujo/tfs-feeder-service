@@ -26,6 +26,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	//Testes
+	testImplementation("org.mockito:mockito-core:3.12.4")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	//Repository
