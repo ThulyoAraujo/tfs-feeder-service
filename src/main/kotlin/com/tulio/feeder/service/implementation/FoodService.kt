@@ -16,22 +16,20 @@ class FoodService(
 ): IFoodService {
 
     override fun findAll(): Any {
-        return foodRepository.findAll()
+        return foodRepository.findAllAndOrderByIdDesc()
     }
 
     override fun createFood(foodForm: FoodForm): Food {
         val food = foodMapper.toFood(foodForm)
+        food.inStock = if (foodForm.inStock != null) foodForm.inStock else true
         return foodRepository.save(food)
     }
 
     override fun updateFood(id: Long, foodForm: FoodForm): Food {
         val food = foodRepository.findById(id).orElseThrow{NotFoundException(notFoundException)}
-        food.name = foodForm.name.toString()
-        return foodRepository.save(food)
-    }
-
-    override fun deleteFood(id: Long): Any {
-        val food = foodRepository.findById(id).orElseThrow{NotFoundException(notFoundException)}
-        return foodRepository.delete(food)
+        val foodMapped = foodMapper.toFood(foodForm)
+        foodMapped.id = id
+        foodMapped.inStock = if (foodForm.inStock != null) foodForm.inStock else food.inStock
+        return foodRepository.save(foodMapped)
     }
 }

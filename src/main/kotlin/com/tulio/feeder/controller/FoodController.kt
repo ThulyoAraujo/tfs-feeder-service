@@ -47,16 +47,4 @@ class FoodController (
         ): Any {
             return foodService.updateFood(id, foodForm)
         }
-
-        /**
-         * Deleta os registros de uma comida do banco.
-         * @param id Identificador único da comida.
-         * @return
-         */
-        @DeleteMapping("/{id}")
-        fun deleteFood(
-            @PathVariable("id") id: Long
-        ): Any {
-            return foodService.deleteFood(id)
-        }
 }
