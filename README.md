@@ -7,7 +7,7 @@ Atualmente gerencia o CRUD de animais.
 ## Tech Stack
 
 - Framework: Spring Boot
-    - Versão: 2.7.7
+    - Versão: 2.7.14
 - Build Tools: Gradle-Kotlin
 - Linguagem: Kotlin
     - Versão: 1.6.21
