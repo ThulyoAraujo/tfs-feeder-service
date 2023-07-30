@@ -7,6 +7,9 @@ import javax.validation.constraints.Size
 /**
  * Formulário que recebe dados de uma comida.
  * @param name Nome da comida.
+ * @param foodType Tipo da comida cadastrada. Enum com tipos vegetal ou animal.
+ * @param note Descrição sobre a comida.
+ * @param inStock Define se uma comida deve estar disponível na aplicação.
  */
 class FoodForm (
 
@@ -16,5 +19,7 @@ class FoodForm (
 
     var foodType: FoodType? = FoodType.VEGETABLE,
 
-    var note: String? = null
+    var note: String? = null,
+
+    var inStock: Boolean? = null
 )

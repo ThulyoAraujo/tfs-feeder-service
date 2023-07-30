@@ -14,6 +14,4 @@ interface IFoodService {
 
     fun updateFood(id: Long, foodForm: FoodForm): Food
 
-    fun deleteFood(id: Long): Any
-
 }
