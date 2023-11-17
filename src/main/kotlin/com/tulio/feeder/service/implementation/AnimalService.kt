@@ -47,20 +47,6 @@ class AnimalService(
         val optionalAnimal = animalRepository.findByNameIgnoreCase(animalForm.name)
         if (optionalAnimal.isPresent) throw AlreadyExistsException(alreadyExistsException)
 
-        //Valida se existe no banco as comidas passadas na requisição.
-        animalForm.primaryPreference?.forEach { food ->
-            val optionalFood = foodRepository.findById(food)
-            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
-        }
-        animalForm.primaryPreference?.forEach { food ->
-            val optionalFood = foodRepository.findById(food)
-            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
-        }
-        animalForm.primaryPreference?.forEach { food ->
-            val optionalFood = foodRepository.findById(food)
-            if (!optionalFood.isPresent) throw NotFoundException("$notFoundFoodException Id: $food.")
-        }
-
         val animal = animalMapper.toAnimal(animalForm)
 
         try {
@@ -70,17 +56,23 @@ class AnimalService(
             //Salva as preferências de comidas
             val listOffoodPreferencesSaved = mutableListOf<FoodPreferences>()
             animalForm.primaryPreference?.forEach { primary ->
-                val foodPreferences = FoodPreferences(null, animalSaved.id, primary, PreferenceLevel.PRIMARY)
+                val optionalFood = foodRepository.findById(primary)
+                if (optionalFood.isEmpty) throw NotFoundException("$notFoundFoodException Id: ${primary}.")
+                val foodPreferences = FoodPreferences(null, animalSaved, optionalFood.get(), PreferenceLevel.PRIMARY)
                 val primaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
                 listOffoodPreferencesSaved.add(primaryFoodPreferencesSaved)
             }
             animalForm.secondaryPreference?.forEach { secondary ->
-                val foodPreferences = FoodPreferences(null, animalSaved.id, secondary, PreferenceLevel.SECONDARY)
+                val optionalFood = foodRepository.findById(secondary)
+                if (optionalFood.isEmpty) throw NotFoundException("$notFoundFoodException Id: ${secondary}.")
+                val foodPreferences = FoodPreferences(null, animalSaved, optionalFood.get(), PreferenceLevel.SECONDARY)
                 val secondaryFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
                 listOffoodPreferencesSaved.add(secondaryFoodPreferencesSaved)
             }
             animalForm.prohibited?.forEach { prohibited ->
-                val foodPreferences = FoodPreferences(null, animalSaved.id, prohibited, PreferenceLevel.PROHIBITED)
+                val optionalFood = foodRepository.findById(prohibited)
+                if (optionalFood.isEmpty) throw NotFoundException("$notFoundFoodException Id: ${prohibited}.")
+                val foodPreferences = FoodPreferences(null, animalSaved, optionalFood.get(), PreferenceLevel.PROHIBITED)
                 val prohibitedFoodPreferencesSaved = foodPreferencesRepository.save(foodPreferences)
                 listOffoodPreferencesSaved.add(prohibitedFoodPreferencesSaved)
             }

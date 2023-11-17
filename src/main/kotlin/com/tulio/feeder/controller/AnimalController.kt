@@ -51,7 +51,7 @@ class AnimalController(
     /**
      * Deleta os registros de um animal do banco.
      * @param id Identificador único do animal.
-     * @return
+     * @return Status ok.
      */
     @DeleteMapping("/{id}")
     fun deleteAnimal(
