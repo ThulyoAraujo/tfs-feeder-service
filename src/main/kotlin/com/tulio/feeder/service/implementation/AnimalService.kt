@@ -28,7 +28,7 @@ class AnimalService(
     private val notFoundAnimalException: String = "Nada encontrado em nosso banco de dados.",
     private val notFoundFoodException: String = "Comida não encontrada em nosso banco de dados.",
     private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados.",
-    private val dataPersistException: String = "Erro ao persistir os dados do cadastro no banco de dados."
+    private val dataPersistException: String = "Erro ao persistir os dados no banco de dados. "
 
 ) : IAnimalService {
 
@@ -82,7 +82,7 @@ class AnimalService(
 
             return animalDTO
         } catch (e: Exception) {
-            throw UnexpectedRollbackException(dataPersistException)
+            throw UnexpectedRollbackException(dataPersistException + e.message)
         }
     }
 
