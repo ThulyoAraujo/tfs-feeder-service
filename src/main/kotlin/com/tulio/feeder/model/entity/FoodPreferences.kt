@@ -1,5 +1,7 @@
 package com.tulio.feeder.model.entity
 
+import org.hibernate.annotations.Cascade
+import org.hibernate.annotations.CascadeType
 import javax.persistence.*
 
 /**
@@ -15,11 +17,14 @@ class FoodPreferences (
     @Column(name = "fop_id")
     var id: Long? = null,
 
-    @Column(name = "fop_animal_id")
-    var animalId: Long,
+    @ManyToOne
+    @JoinColumn(name = "fop_animal_id")
+    var animalId: Animal,
 
-    @Column(name = "fop_food_id")
-    var foodId: Long,
+    @ManyToOne
+    @JoinColumn(name = "fop_food_id")
+    @Cascade(CascadeType.ALL)
+    var foodId: Food,
 
     @Column(name = "fop_preference_level")
     @Enumerated(EnumType.ORDINAL)
