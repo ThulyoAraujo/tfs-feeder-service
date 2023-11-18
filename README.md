@@ -2,7 +2,9 @@ Documentação da API tfs-feeder-service, que consiste em uma aplicação para v
 
 Em desenvolvimento.
 
-Atualmente gerencia o CRUD de animais.
+Atualmente:
+- Gerencia o CRUD de animais.
+- Gerencia o CRUD de comidas.
 
 ## Tech Stack
 
