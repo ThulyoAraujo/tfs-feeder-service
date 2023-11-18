@@ -19,6 +19,7 @@ class FoodPreferences (
 
     @ManyToOne
     @JoinColumn(name = "fop_animal_id")
+    @Cascade(CascadeType.ALL)
     var animalId: Animal,
 
     @ManyToOne

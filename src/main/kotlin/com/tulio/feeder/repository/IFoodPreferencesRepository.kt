@@ -10,9 +10,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface IFoodPreferencesRepository : CrudRepository<FoodPreferences, Long> {
 
-    fun findAllByFoodId(foodId: Food) : MutableIterable<FoodPreferences>
-
     @Modifying
     @Query(value = "DELETE FROM tfs_fop_food_preferences WHERE fop_food_id = :foodId", nativeQuery = true)
     fun deleteAllByFoodId(foodId: Food)
+
+    @Modifying
+    @Query(value = "DELETE FROM tfs_fop_food_preferences WHERE fop_animal_id IS NULL", nativeQuery = true)
+    fun deleteAllByAnimalIdIsNull()
+
 }

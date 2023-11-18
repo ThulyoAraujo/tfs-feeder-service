@@ -14,8 +14,11 @@ import com.tulio.feeder.repository.IAnimalRepository
 import com.tulio.feeder.repository.IFoodPreferencesRepository
 import com.tulio.feeder.repository.IFoodRepository
 import com.tulio.feeder.service.IAnimalService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.UnexpectedRollbackException
+import javax.persistence.EntityManager
 import javax.transaction.Transactional
 
 @Service
@@ -28,7 +31,8 @@ class AnimalService(
     private val notFoundAnimalException: String = "Nada encontrado em nosso banco de dados.",
     private val notFoundFoodException: String = "Comida não encontrada em nosso banco de dados.",
     private val alreadyExistsException: String = "Este animal já existe em nosso banco de dados.",
-    private val dataPersistException: String = "Erro ao persistir os dados no banco de dados. "
+    private val dataPersistException: String = "Erro ao persistir os dados no banco de dados. ",
+    private val entityDeletedSuccessfully: String = "Entidade deletada com sucesso."
 
 ) : IAnimalService {
 
@@ -92,8 +96,14 @@ class AnimalService(
         return animalRepository.save(animal)
     }
 
-    override fun deleteAnimal(id: Long): Any {
+    @Transactional
+    override fun deleteAnimal(id: Long): ResponseEntity<String> {
         val animal = animalRepository.findById(id).orElseThrow { NotFoundException(notFoundAnimalException) }
-        return animalRepository.delete(animal)
+
+        animal.foodPreferences = null
+        foodPreferencesRepository.deleteAllByAnimalIdIsNull()
+
+        animalRepository.deleteAllByAnimalId(id)
+        return ResponseEntity.ok(entityDeletedSuccessfully)
     }
 }
