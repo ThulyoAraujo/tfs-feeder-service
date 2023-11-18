@@ -1,5 +1,6 @@
 package com.tulio.feeder.model.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 /**
@@ -24,5 +25,6 @@ class Animal(
 
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinColumn(name = "fop_animal_id", referencedColumnName = "ani_id")
+    @JsonIgnore //Evita recursão e apenas serializa esta classe Animal
     var foodPreferences: List<FoodPreferences>? = emptyList(),
 )
