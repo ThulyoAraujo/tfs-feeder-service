@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
  */
 @Service
 class MainService() : IMainService {
-    override fun realocatesAnimals(): Any {
-        return "Teste realocatesAnimals"
+    override fun realocatesAnimals(animalsIds: List<Long>): Any {
+        return "Lista: $animalsIds"
     }
 }

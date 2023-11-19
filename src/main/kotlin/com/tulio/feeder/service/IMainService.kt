@@ -5,5 +5,5 @@ package com.tulio.feeder.service
  */
 interface IMainService {
 
-    fun realocatesAnimals(): Any
+    fun realocatesAnimals(animalsIds: List<Long>): Any
 }

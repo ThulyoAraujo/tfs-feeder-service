@@ -3,6 +3,7 @@ package com.tulio.feeder.controller
 import com.tulio.feeder.service.IMainService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
@@ -20,7 +21,7 @@ class MainController(
         e impedindo de animais serem incomodados pela comida dos outros
     */
     @GetMapping
-    fun relocatesAnimals(): Any {
-        return mainService.realocatesAnimals()
+    fun relocatesAnimals(@RequestParam animalsIds: List<Long>): Any {
+        return mainService.realocatesAnimals(animalsIds)
     }
 }
