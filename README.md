@@ -1,16 +1,16 @@
-Documentação da API tfs-feeder-service, que consiste em uma aplicação para verificar e retornar se determinados animais podem permanecer juntos baseada exclusivamente na sua alimentação.
+Documentation of the tfs-feeder-service API, which consists of an application to check and return whether certain animals can remain together based exclusively on their food.
 
-Em desenvolvimento.
+Under development.
 
-Atualmente:
-- Gerencia o CRUD de animais.
-- Gerencia o CRUD de comidas.
+## Current functions:
+- Manages the CRUD of animals.
+- Manages food CRUD.
 
 ## Tech Stack
 
 - Framework: Spring Boot
-    - Versão: 2.7.14
+    - Version: 2.7.14
 - Build Tools: Gradle-Kotlin
-- Linguagem: Kotlin
-    - Versão: 1.6.21
+- Language: Kotlin
+    - Version: 1.6.21
     - JDK: 11
