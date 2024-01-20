@@ -2,7 +2,7 @@ Documentation of the tfs-feeder-service API, which consists of an application to
 
 Under development.
 
-## Current functions:
+## Current functions
 - Manages the CRUD of animals.
 - Manages food CRUD.
 
